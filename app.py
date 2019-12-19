@@ -1,5 +1,6 @@
 import os, sys
 from flask import Flask, request
+from utils.util import wit_response
 from pymessenger import Bot
 
 app = Flask(__name__)
@@ -37,7 +38,13 @@ def webhook():
                         messaging_text = 'no text'
                     #  Echo
                     response = messaging_text
+                    response = None
+                    entity, value = wit_response(messaging_text)
 
+                    if entity == 'airtime':
+                        response = "Ok. How much airtime do you need"
+                    elif entity == 'data':
+                        response = "ok. what type of data would you like to buy"
                     bot.send_text_message(sender_id, response)
 
     return "ok", 200
